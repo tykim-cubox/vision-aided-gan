@@ -76,6 +76,8 @@ class Swin(torch.nn.Module):
         return x
 
     def __call__(self, x):
+        if x.dim() != 4:
+            x = x.unsqueeze(dim=0)
         x = F.interpolate(x*0.5+0.5, size=(224, 224), mode='area')
         x = x - self.image_mean[:, None, None].to(x.device)
         x /= self.image_std[:, None, None].to(x.device)

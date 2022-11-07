@@ -336,7 +336,7 @@ def training_loop(
     if rank == 0:
         stats_jsonl = open(os.path.join(run_dir, 'stats.jsonl'), 'wt')
         if wandb_log:
-            wandb.init(project="new_ganvision", entity='nupurkmr9', name=desc)
+            wandb.init(project="ganvision", entity='nupurkmr9', name=desc)
         else:
             try:
                 import torch.utils.tensorboard as tensorboard

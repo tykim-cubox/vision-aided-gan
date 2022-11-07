@@ -35,8 +35,8 @@ cv_models_list = [
     'input-vgg-output-pool',
     'input-seg_ade-output-pool',
     'input-det_coco-output-pool',
-    'input-face_seg-output-pool',
-    'input-face_normals-output-pool',
+    #'input-face_seg-output-pool',
+    #'input-face_normals-output-pool',
     ]
 
 
@@ -44,13 +44,14 @@ def parse_args():
     parser = argparse.ArgumentParser("vision-aided-gan",  parents=[train.get_args_parser()], add_help=False)
     parser.add_argument("--kimgs-list", default='4000,1000,1000', type=str, help="comma separated iterations to train with each pretrained model")
     parser.add_argument("--num", default=3, type=int, help="number of models in vision-aided-gan training: maximum 3")
+    # parser.add_argument("--batch", default=64, type=int)
     return parser.parse_args()
 
 
 def launch(args):
     torch.multiprocessing.set_start_method('spawn')
     data = args.data
-    batch = args.batch
+    batch = args.batch if args.batch is not None else 64
     outdir = args.outdir
 
     if args.resume is None:

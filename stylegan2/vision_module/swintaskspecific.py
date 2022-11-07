@@ -12,8 +12,8 @@ import torch.utils.checkpoint as checkpoint
 import numpy as np
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 
-import vision_aided_module.utils_ as utils
-
+# import vision_aided_module.utils_ as utils
+import vision_module.utils_ as utils
 
 class Mlp(nn.Module):
     """ Multilayer perceptron."""

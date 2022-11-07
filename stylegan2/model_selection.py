@@ -71,7 +71,7 @@ def calc_linearprobe(network_pkl, data, batch=64, cv_models_list=None, device='c
         output_type = cv.split('output-')[1]
         cv_type = cv.split('-output')[0].split('input-')[1]
         
-        cv_ensemble = vision_module.cvmodel.CVBackbone(cv_type= cv_type, output_type = output_type, diffaug = False).requires_grad_(False).to(device)
+        cv_ensemble = vision_module.cvmodel.CVBackbone(cv_type= cv_type, output_type = output_type, diffaug = False, device=device).requires_grad_(False).to(device)
 
         val_feats = []
         val_label = []
@@ -115,7 +115,12 @@ def calc_linearprobe(network_pkl, data, batch=64, cv_models_list=None, device='c
             with torch.no_grad():
                 for _ in range(len(training_set) // batch):
                     z = torch.randn(batch, G_ema.z_dim)
-                    val_img = G_ema(z.to(device), None)
+                    if G_ema.c_dim > 0:
+                        c = torch.randint(low=0, high=G_ema.c_dim, size=(batch, G_ema.c_dim), dtype=torch.float32).to(device)
+                    else:
+                        c = None
+                    val_img = G_ema(z.to(device), c)
+                    # val_img = G_ema(z.to(device), None)
                     val_feat = cv_ensemble([val_img])[0]
                     feats.append(val_feat.cpu())
                     label.append(np.zeros(val_feat.size(0)))
